@@ -296,7 +296,8 @@
                             <div class="cat-toggle">
                                 <button type="button" class="cat-toggle-btn cat-toggle-btn-1"><i class="fal fa-bars"></i> Shop by department</button>
                                 <div class="cat__menu">
-                                    <nav id="mobile-menu" style="display: block;">
+                                    @await Component.InvokeAsync("Category")
+                                  @*  <nav id="mobile-menu" style="display: block;">
                                         <ul>
                                             <li>
                                                 <a href="shop.html">All Categories <i class="far fa-angle-down"></i></a>
@@ -464,7 +465,7 @@
                                             <li class="d-laptop-none"><a href="shop.html">Jewelry &amp; Watches</a></li>
                                             <li><a href="shop.html">Health &amp; Beauty</a></li>
                                         </ul>
-                                    </nav>
+                                    </nav>*@
                                 </div>
                             </div>
                         </div>
@@ -849,5 +850,7 @@
       <script src="/assets/js/imagesloaded-pkgd.js"></script>
       <script src="/assets/js/ajax-form.js"></script>
       <script src="/assets/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required:false)
+
    </body>
 </html>

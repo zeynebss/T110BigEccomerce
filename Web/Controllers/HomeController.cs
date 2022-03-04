@@ -1,21 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Services;
 using System.Diagnostics;
 using Web.Models;
+using Web.ViewModels;
 
 namespace Web.Controllers
 {
     public class HomeController : Controller
+
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ProductManager _productManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ProductManager productManager)
         {
             _logger = logger;
+            _productManager = productManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index( int id)
         {
-            return View();
+            IndexVM vm = new() {
+                
+                ProductFeatured=_productManager.GetAll(p=>p.IsFeatured),
+                ProductIsSlider = _productManager.GetAll(p => p.IsSlider)
+            };
+
+            return View(vm);
         }
 
         public IActionResult Privacy()

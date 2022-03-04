@@ -34,18 +34,31 @@ namespace Services
            selectedProduct.IsDeleted=true;
             await _agencyContext.SaveChangesAsync();
             }
-        public async Task<List<Product>> GetAll()
+        public List<Product> GetAll(Func<Product,bool> filter=null)
         {
 
-            return await _agencyContext.Products.
+            return  _agencyContext.Products.
                 Where(x =>!x.IsDeleted)
                 .Include(p=>p.Category)
                 .Include(p =>p.ProductRecords)
                 .Include(p=>p.ProductPictures).ThenInclude(p=>p.Picture)
-               .OrderByDescending(p=>p.ModifiedOn).ToListAsync();
+                .Where(filter)
+               .OrderByDescending(p=>p.ModifiedOn).ToList();
 
 
          }
+        public async Task<List<Product>> GetAllAdmin()
+        {
+
+            return await _agencyContext.Products.
+                Where(x => !x.IsDeleted)
+                .Include(p => p.Category)
+                .Include(p => p.ProductRecords)
+               
+               .OrderByDescending(p => p.ModifiedOn).ToListAsync();
+
+
+        }
         public async Task<List<Product>> SearchProduct(string? q, int? categoryId, decimal? minPrice, decimal? maxPrice,int? sortBy)
         {
             var products = _agencyContext.Products
@@ -75,10 +88,14 @@ products = products.Where(p=>p.ProductRecords.Any(c=>c.Name.ToLower().Contains(q
             return await _agencyContext.Products.ToListAsync();
                 }
 
-        public async Task<Product?> GetById(int id)
-        {
-            var selectedProduct = await _agencyContext.Products.FirstOrDefaultAsync(p=>!p.IsDeleted && p.Id==id);
-            if (selectedProduct != null) return null;
+       public async Task<Product?> GetById(int id)
+       {
+           var selectedProduct = await _agencyContext.Products
+               .Include(p => p.ProductRecords) 
+               .Include(p=>p.ProductPictures)
+               .ThenInclude(p => p.Picture)  
+               .FirstOrDefaultAsync(p=>!p.IsDeleted && p.Id==id);
+           if (selectedProduct != null) return null;
             return selectedProduct;
         }
     }

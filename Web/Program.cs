@@ -15,6 +15,7 @@ builder.Services.AddDefaultIdentity<ECommerceUser>(options => options.SignIn.Req
     .AddEntityFrameworkStores<AgencyContext>();
 
 builder.Services.AddScoped<ProductManager>();
+builder.Services.AddScoped<CategoryManager>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +32,16 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapControllerRoute(
+      name: "EntityCreate",
+     "{area:exists}/{controller=Products}/Create/",
+      new {action="Action"}
+    );
+app.MapControllerRoute(
+      name: "EntityEdit",
+      "{area:exists}/{controller=Products}/Edit/{id?}",
+      new { action = "Action" }
+    );
 
 app.MapControllerRoute(
       name: "areas",

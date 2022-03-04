@@ -1,9 +1,15 @@
-﻿   <main>
+﻿@using Web.ViewModels
+@model IndexVM 
+<main>
         <!-- slider-area-start -->
         <div class="slider-area">
             <div class="swiper-container slider__active">
                 <div class="slider-wrapper swiper-wrapper">
-                    <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="/assets/img/slider/01-slide-1.jpg">
+                   @foreach(var slider in Model.ProductIsSlider)
+                {
+                    var productRec = slider.ProductRecords.FirstOrDefault(c => c.LanguageId == 1);
+
+                <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="/assets/img/slider/01-slide-1.jpg">
                         <div class="container">
                             <div class="row">
                                 <div class="col-xl-5">
@@ -11,8 +17,10 @@
                                         <div class="slider-top-btn" data-animation="fadeInLeft" data-delay="1.5s">
                                             <a href="product-details.html" class="st-btn b-radius">HOT DEALS</a>
                                         </div>
-                                        <h2 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5">SALE 30% OFF <br> FUTURE FOOTBALL BOOTS</h2>
-                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.9s">Discount 30% On Products & Free Shipping</p>
+                                        <h2 data-animation="fadeInLeft" data-delay="1.7s" class="pt-15 slider-title pb-5">
+                                            @productRec.Name
+                                            </h2>
+                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.9s">@productRec.Summary</p>
                                         <div class="slider-bottom-btn mt-75">
                                             <a data-animation="fadeInUp" data-delay="1.15s" href="shop.html" class="st-btn-b b-radius">Discover now</a>
                                         </div>
@@ -20,7 +28,10 @@
                                 </div>
                             </div>
                         </div>
+                       
                     </div><!-- /single-slider -->
+                    }
+
                     <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="/assets/img/slider/01-slide-2.jpg">
                         <div class="container">
                             <div class="row">
@@ -38,26 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div><!-- /single-slider -->
-                    <div class="single-slider swiper-slide slider-height d-flex align-items-center" data-background="/assets/img/slider/01-slide-3.jpg">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xl-5">
-                                    <div class="slider-content">
-                                        <div class="slider-top-btn" data-animation="fadeInLeft" data-delay="1s">
-                                            <a href="product-details.html" class="st-btn b-radius">New DEALS</a>
-                                        </div>
-                                        <h2 data-animation="fadeInLeft" data-delay="1.5s" class="pt-15 slider-title pb-5">SALE 30% OFF <br> FUTURE FOOTBALL BOOTS</h2>
-                                        <p class="pr-20 slider_text" data-animation="fadeInLeft" data-delay="1.8s">Discount 30% On Products & Free Shipping</p>
-                                        <div class="slider-bottom-btn mt-75">
-                                            <a data-animation="fadeInUp" data-delay="1.10s" href="shop.html" class="st-btn-b b-radius">Discover now</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- /single-slider -->
-                    <div class="main-slider-paginations"></div>
+                   
                 </div>
             </div>
         </div>
@@ -187,6 +179,11 @@
                     <div class="product-bs-slider">
                         <div class="product-slider swiper-container">
                             <div class="swiper-wrapper">
+                                @foreach(var item in Model.ProductFeatured)
+                                {
+                                     var productRec = item.ProductRecords.FirstOrDefault(c => c.LanguageId == 1);
+                                    
+                                
                                 <div class="product__item swiper-slide">
                                     <div class="product__thumb fix">
                                         <div class="product-image w-img">
@@ -195,7 +192,9 @@
                                             </a>
                                         </div>
                                         <div class="product__offer">
-                                        <span class="discount">-15%</span>
+                                        <span class="discount">
+                             @(item.Discount>0 && item.Discount !=null? 
+                                            ((int)(item.Price-item.Discount)/item.Price)*100:null)</span>
                                         </div>
                                         <div class="product-action">
                                             <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
@@ -225,8 +224,12 @@
                                             <span>(01 review)</span>
                                         </div>
                                         <div class="price mb-10">
-                                            <span>$105-$110</span>
-                                        </div>
+                                                @if(item.Discount !=null && item.Discount!=null)
+                                                {
+                                                    <span>@item.Price</span>
+                                             <span>@item.Discount</span>
+                                                }
+                                            </div>
                                         <div class="progress mb-5">
                                             <div class="progress-bar bg-danger" role="progressbar" style="width: 10%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
@@ -240,6 +243,8 @@
                                         </button>
                                     </div>
                                 </div>
+
+                                }
                                 <div class="product__item swiper-slide">
                                     <div class="product__thumb fix">
                                         <div class="product-image w-img">
@@ -262,6 +267,7 @@
                                             </a>
                                         </div>
                                     </div>
+                                    
                                     <div class="product__content">
                                         <h6><a href="product-details.html">Men Size Yellow Basketball Jerseys</a></h6>
                                         <div class="rating mb-5">
